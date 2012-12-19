@@ -474,11 +474,13 @@ void list_if(void)
         if (netif->flags & NETIF_FLAG_ETHARP) rt_kprintf(" ETHARP");
         if (netif->flags & NETIF_FLAG_IGMP) rt_kprintf(" IGMP");
         rt_kprintf("\n");
+#if LWIP_IPV6
 		for (i = 0; i < LWIP_IPV6_NUM_ADDRESSES; i++) {
 			if (ip6_addr_isvalid(netif_ip6_addr_state(netif, i))) {
 				rt_kprintf("IPv6 address: %s\n", ip6addr_ntoa(&(netif_default->ip6_addr[i])));
 			}
 		}
+#endif
         rt_kprintf("IPv4 address: %s\n", ipaddr_ntoa(&(netif->ip_addr)));
         rt_kprintf("net mask  : %s\n", ipaddr_ntoa(&(netif->netmask)));
         rt_kprintf("gw address: %s\n", ipaddr_ntoa(&(netif->gw)));
