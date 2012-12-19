@@ -33,6 +33,12 @@ src/core/ipv4/igmp.c
 src/core/ipv4/ip4.c
 src/core/ipv4/ip4_addr.c
 src/core/ipv4/ip_frag.c
+src/netif/etharp.c
+src/netif/ethernetif.c
+src/netif/slipif.c
+""")
+
+ipv6_src = Split("""
 src/core/ipv6/dhcp6.c
 src/core/ipv6/ethip6.c
 src/core/ipv6/icmp6.c
@@ -42,9 +48,6 @@ src/core/ipv6/ip6_addr.c
 src/core/ipv6/ip6_frag.c
 src/core/ipv6/mld6.c
 src/core/ipv6/nd6.c
-src/netif/etharp.c
-src/netif/ethernetif.c
-src/netif/slipif.c
 """)
 
 snmp_src = Split("""
@@ -81,6 +84,9 @@ path = [GetCurrentDir() + '/src',
     GetCurrentDir() + '/src/arch/include',
     GetCurrentDir() + '/src/include/netif']
 
+if GetDepend(['RT_LWIP_IPV6']):
+    src += ipv6_src
+
 if GetDepend(['RT_LWIP_SNMP']):
     src += snmp_src
 
@@ -92,7 +98,10 @@ if GetDepend(['RT_LWIP_PPP']):
 if GetDepend(['RT_USING_NETUTILS']):
     src += Glob('./apps/*.c')
 
+# for copy and delete method of upgrade
 group = DefineGroup('LwIP', src, depend = ['RT_USING_LWIP'], CPPPATH = path)
+# for parallel upgrade
+#group = DefineGroup('LwIP', src, depend = ['RT_USING_LWIP', 'RT_USING_LWIP_HEAD'], CPPPATH = path)
 
 Return('group')
 
