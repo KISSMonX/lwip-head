@@ -92,7 +92,7 @@ if GetDepend(['RT_LWIP_PPP']):
 if GetDepend(['RT_USING_NETUTILS']):
     src += Glob('./apps/*.c')
 
-group = DefineGroup('LwIP', src, depend = ['RT_USING_LWIP', 'RT_USING_LWIP_HEAD'], CPPPATH = path)
+group = DefineGroup('LwIP', src, depend = ['RT_USING_LWIP'], CPPPATH = path)
 
 Return('group')
 
